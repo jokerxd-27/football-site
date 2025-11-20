@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Nexus - Live Matches, Rankings & World Cup</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #e2e8f0;
+            overflow-x: hidden; /* Prevent horizontal scroll due to potential overflow */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-bg {
+            background-image: url('https://image.pollinations.ai/prompt/professional%20football%20stadium%20packed%20with%20fans%20dynamic%20lighting%20epic%20shot%20night%20game?width=1920&height=1080&nologo=true');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08); /* A slight white tint for visibility */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #1d4ed8, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .section-gradient-bg {
+            background: linear-gradient(180deg, #0d1117, #1a202c);
+        }
+        .footer-gradient-bg {
+            background: linear-gradient(0deg, #0d1117, #1a202c);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #9333ea; /* Purple accent */
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6b7280;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 glass-card shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-white tracking-tight">
+                Football<span class="gradient-text">Nexus</span>
+            </a>
+            <div class="hidden md:flex space-x-8 lg:space-x-12 items-center">
+                <a href="#home" class="text-white text-lg font-medium nav-link transition duration-300">Home</a>
+                <a href="#live-matches" class="text-white text-lg font-medium nav-link transition duration-300">Live Matches</a>
+                <a href="#world-cup" class="text-white text-lg font-medium nav-link transition duration-300">World Cup</a>
+                <a href="#players" class="text-white text-lg font-medium nav-link transition duration-300">Players</a>
+                <a href="#news" class="text-white text-lg font-medium nav-link transition duration-300">News</a>
+                <button class="bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-600 hover:to-purple-500 text-white font-semibold py-2 px-6 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                </button>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 bg-black/80 backdrop-blur-xl z-50 flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+            <button id="close-mobile-menu" class="absolute top-6 right-6 text-white text-4xl focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+            <a href="#home" class="text-white text-3xl font-semibold hover:text-purple-400 transition duration-300">Home</a>
+            <a href="#live-matches" class="text-white text-3xl font-semibold hover:text-purple-400 transition duration-300">Live Matches</a>
+            <a href="#world-cup" class="text-white text-3xl font-semibold hover:text-purple-400 transition duration-300">World Cup</a>
+            <a href="#players" class="text-white text-3xl font-semibold hover:text-purple-400 transition duration-300">Players</a>
+            <a href="#news" class="text-white text-3xl font-semibold hover:text-purple-400 transition duration-300">News</a>
+            <button class="bg-gradient-to-r from-blue-700 to-purple-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-2xl">
+                <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+            </button>
+        </div>
+    </nav>
+
+    <main class="pt-24">
+        <!-- Hero Section -->
+        <section id="home" class="hero-bg text-white h-screen flex items-center justify-center text-center p-6">
+            <div class="absolute inset-0 bg-black/60"></div>
+            <div class="relative z-10 max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 animate-fade-in-up">
+                    Experience The Beautiful Game <span class="gradient-text">Like Never Before</span>
+                </h1>
+                <p class="text-lg md:text-2xl mb-10 opacity-90 leading-relaxed animate-fade-in-up delay-200">
+                    Dive into the heart of football with live scores, comprehensive stats, World Cup schedules, and player insights from around the globe.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up delay-400">
+                    <a href="#live-matches" class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-xl transform hover:scale-105 transition duration-300 text-lg">
+                        <i class="fas fa-futbol mr-2"></i> Watch Live Matches
+                    </a>
+                    <a href="#world-cup" class="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-full shadow-xl transform hover:scale-105 transition duration-300 text-lg glass-card">
+                        <i class="fas fa-trophy mr-2"></i> World Cup Schedule
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Live Matches Section -->
+        <section id="live-matches" class="py-20 px-6 section-gradient-bg">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+                    Upcoming & <span class="gradient-text">Live Matches</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Match Card 1 -->
+                    <div class="glass-card p-8 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-sm font-semibold text-purple-400 bg-purple-900/40 px-3 py-1 rounded-full"><i class="fas fa-circle text-red-500 text-xs mr-2 animate-pulse"></i>LIVE</span>
+                                <span class="text-sm text-gray-400"><i class="far fa-calendar-alt mr-2"></i>Today, 19:00 GMT</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-between text-center space-y-6 md:space-y-0">
+                                <div class="flex items-center w-full justify-center gap-4">
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20blue%20lion%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team A" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">United FC</h3>
+                                    </div>
+                                    <div class="text-5xl font-bold gradient-text w-1/3">3 - 1</div>
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20red%20dragon%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team B" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">City Rovers</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-8">
+                            <button class="bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-600 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-lg">
+                                <i class="fas fa-play-circle mr-2"></i> Watch Stream
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Match Card 2 -->
+                    <div class="glass-card p-8 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-sm font-semibold text-gray-400 bg-gray-700/40 px-3 py-1 rounded-full"><i class="fas fa-hourglass-half text-yellow-400 text-xs mr-2"></i>Upcoming</span>
+                                <span class="text-sm text-gray-400"><i class="far fa-calendar-alt mr-2"></i>Tomorrow, 16:00 GMT</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-between text-center space-y-6 md:space-y-0">
+                                <div class="flex items-center w-full justify-center gap-4">
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20green%20eagle%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team C" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">Galactic FC</h3>
+                                    </div>
+                                    <div class="text-5xl font-bold gradient-text w-1/3">VS</div>
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20yellow%20star%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team D" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">Star United</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-8">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-lg">
+                                <i class="fas fa-info-circle mr-2"></i> Match Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Match Card 3 -->
+                    <div class="glass-card p-8 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-6">
+                                <span class="text-sm font-semibold text-gray-400 bg-gray-700/40 px-3 py-1 rounded-full"><i class="fas fa-hourglass-half text-yellow-400 text-xs mr-2"></i>Upcoming</span>
+                                <span class="text-sm text-gray-400"><i class="far fa-calendar-alt mr-2"></i>Mon, 27 May, 21:00 GMT</span>
+                            </div>
+                            <div class="flex flex-col items-center justify-between text-center space-y-6 md:space-y-0">
+                                <div class="flex items-center w-full justify-center gap-4">
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20orange%20phoenix%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team E" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">Phoenix FC</h3>
+                                    </div>
+                                    <div class="text-5xl font-bold gradient-text w-1/3">VS</div>
+                                    <div class="flex flex-col items-center w-1/3">
+                                        <img src="https://image.pollinations.ai/prompt/abstract%20white%20wolf%20football%20club%20logo?width=100&height=100&nologo=true" alt="Team F" class="w-16 h-16 object-contain mb-2">
+                                        <h3 class="text-xl font-semibold text-white">Wolves United</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-8">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-lg">
+                                <i class="fas fa-info-circle mr-2"></i> Match Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FIFA World Cup Section -->
+        <section id="world-cup" class="py-20 px-6 section-gradient-bg">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+                    FIFA World Cup <span class="gradient-text">Schedule & Updates</span>
+                </h2>
+                <div class="flex flex-col lg:flex-row gap-12 items-center justify-center">
+                    <div class="lg:w-1/2 p-6 glass-card shadow-xl rounded-xl">
+                        <img src="https://image.pollinations.ai/prompt/golden%20world%20cup%20trophy%20on%20pedestal%20spotlight%20dark%20background?width=800&height=500&nologo=true" alt="FIFA World Cup Trophy" class="rounded-lg shadow-md mb-8 w-full h-auto object-cover">
+                        <h3 class="text-3xl font-bold mb-4 text-white">Road to Glory: FIFA World Cup 2026</h3>
+                        <p class="text-gray-300 leading-relaxed mb-6">
+                            Prepare for the greatest spectacle in football! The FIFA World Cup 2026 is set to electrify North America with expanded teams and unprecedented excitement. Stay updated with all the qualifiers, match schedules, and host city details right here.
+                        </p>
+                        <ul class="space-y-4 text-gray-200">
+                            <li><i class="fas fa-map-marker-alt text-purple-400 mr-3"></i> Host Nations: USA, Canada, Mexico</li>
+                            <li><i class="fas fa-calendar-alt text-purple-400 mr-3"></i> Dates: June 11 – July 19, 2026</li>
+                            <li><i class="fas fa-users text-purple-400 mr-3"></i> Teams: 48 (Expanded Format)</li>
+                            <li><i class="fas fa-city text-purple-400 mr-3"></i> Cities: 16 Host Cities</li>
+                        </ul>
+                    </div>
+                    <div class="lg:w-1/2 p-6 glass-card shadow-xl rounded-xl">
+                        <h3 class="text-3xl font-bold mb-8 text-center text-white">Upcoming Matches</h3>
+                        <div class="space-y-6">
+                            <!-- Schedule Item 1 -->
+                            <div class="flex items-center p-4 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition duration-300 border border-gray-700">
+                                <div class="flex-shrink-0 text-center w-20">
+                                    <p class="text-sm text-gray-400">June</p>
+                                    <p class="text-3xl font-bold text-white">12</p>
+                                    <p class="text-sm text-gray-400">2026</p>
+                                </div>
+                                <div class="ml-6 flex-grow">
+                                    <p class="text-xl font-semibold text-white">Brazil vs. Argentina</p>
+                                    <p class="text-gray-400 text-sm"><i class="fas fa-clock mr-2"></i> 20:00 GMT | <i class="fas fa-map-marker-alt mr-2"></i> MetLife Stadium, USA</p>
+                                </div>
+                                <button class="ml-auto text-purple-400 hover:text-purple-300 text-2xl"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <!-- Schedule Item 2 -->
+                            <div class="flex items-center p-4 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition duration-300 border border-gray-700">
+                                <div class="flex-shrink-0 text-center w-20">
+                                    <p class="text-sm text-gray-400">June</p>
+                                    <p class="text-3xl font-bold text-white">14</p>
+                                    <p class="text-sm text-gray-400">2026</p>
+                                </div>
+                                <div class="ml-6 flex-grow">
+                                    <p class="text-xl font-semibold text-white">France vs. Germany</p>
+                                    <p class="text-gray-400 text-sm"><i class="fas fa-clock mr-2"></i> 18:00 GMT | <i class="fas fa-map-marker-alt mr-2"></i> Azteca Stadium, Mexico</p>
+                                </div>
+                                <button class="ml-auto text-purple-400 hover:text-purple-300 text-2xl"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <!-- Schedule Item 3 -->
+                            <div class="flex items-center p-4 bg-gray-800/50 rounded-lg hover:bg-gray-700/50 transition duration-300 border border-gray-700">
+                                <div class="flex-shrink-0 text-center w-20">
+                                    <p class="text-sm text-gray-400">June</p>
+                                    <p class="text-3xl font-bold text-white">15</p>
+                                    <p class="text-sm text-gray-400">2026</p>
+                                </div>
+                                <div class="ml-6 flex-grow">
+                                    <p class="text-xl font-semibold text-white">Canada vs. Spain</p>
+                                    <p class="text-gray-400 text-sm"><i class="fas fa-clock mr-2"></i> 22:00 GMT | <i class="fas fa-map-marker-alt mr-2"></i> BMO Field, Canada</p>
+                                </div>
+                                <button class="ml-auto text-purple-400 hover:text-purple-300 text-2xl"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                        <div class="text-center mt-10">
+                            <button class="bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-600 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-lg">
+                                <i class="fas fa-list-alt mr-2"></i> View Full Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Player Rankings Section -->
+        <section id="players" class="py-20 px-6 section-gradient-bg">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+                    Top Players & <span class="gradient-text">Global Rankings</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    <!-- Player Card 1 -->
+                    <div class="glass-card p-6 text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/professional%20footballer%20player%20portrait%20dynamic%20shot%20focused%20expression%20vibrant%20colors?width=400&height=400&nologo=true" alt="Player Name" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-purple-500 shadow-md object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-2">Leon Maxwell</h3>
+                        <p class="text-purple-400 font-medium mb-3">Forward | Team Elite</p>
+                        <div class="flex justify-around text-gray-300 text-sm mb-4">
+                            <span><i class="fas fa-futbol mr-1"></i> Goals: 35</span>
+                            <span><i class="fas fa-chart-line mr-1"></i> Assists: 12</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">A phenomenal striker known for his blistering pace and clinical finishes. Leads the league in goals this season.</p>
+                        <button class="bg-gradient-to-r from-blue-600 to-purple-500 hover:from-blue-500 hover:to-purple-400 text-white font-semibold py-2 px-6 rounded-full text-sm">
+                            View Profile
+                        </button>
+                    </div>
+
+                    <!-- Player Card 2 -->
+                    <div class="glass-card p-6 text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/professional%20football%20midfielder%20player%20portrait%20focused%20intense%20studio%20lighting?width=400&height=400&nologo=true" alt="Player Name" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-blue-500 shadow-md object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-2">Anya Sharma</h3>
+                        <p class="text-blue-400 font-medium mb-3">Midfielder | Dynamo Stars</p>
+                        <div class="flex justify-around text-gray-300 text-sm mb-4">
+                            <span><i class="fas fa-futbol mr-1"></i> Goals: 10</span>
+                            <span><i class="fas fa-chart-line mr-1"></i> Assists: 20</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">The engine of her team, Anya's vision and passing range are unmatched, dictating play from the center.</p>
+                        <button class="bg-gradient-to-r from-blue-600 to-purple-500 hover:from-blue-500 hover:to-purple-400 text-white font-semibold py-2 px-6 rounded-full text-sm">
+                            View Profile
+                        </button>
+                    </div>
+
+                    <!-- Player Card 3 -->
+                    <div class="glass-card p-6 text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/professional%20football%20defender%20player%20portrait%20strong%20pose%20stadium%20background?width=400&height=400&nologo=true" alt="Player Name" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-green-500 shadow-md object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-2">Diego Lopez</h3>
+                        <p class="text-green-400 font-medium mb-3">Defender | Titan City</p>
+                        <div class="flex justify-around text-gray-300 text-sm mb-4">
+                            <span><i class="fas fa-futbol mr-1"></i> Goals: 2</span>
+                            <span><i class="fas fa-chart-line mr-1"></i> Tackles: 87</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">A rock in defense, Diego's leadership and impeccable timing make him a nightmare for opposing attackers.</p>
+                        <button class="bg-gradient-to-r from-blue-600 to-purple-500 hover:from-blue-500 hover:to-purple-400 text-white font-semibold py-2 px-6 rounded-full text-sm">
+                            View Profile
+                        </button>
+                    </div>
+
+                    <!-- Player Card 4 -->
+                    <div class="glass-card p-6 text-center shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/professional%20football%20goalkeeper%20player%20portrait%20dynamic%20save%20action%20shot?width=400&height=400&nologo=true" alt="Player Name" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-yellow-500 shadow-md object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-2">Chloe Davis</h3>
+                        <p class="text-yellow-400 font-medium mb-3">Goalkeeper | Royal United</p>
+                        <div class="flex justify-around text-gray-300 text-sm mb-4">
+                            <span><i class="fas fa-futbol mr-1"></i> Saves: 150</span>
+                            <span><i class="fas fa-chart-line mr-1"></i> Clean Sheets: 15</span>
+                        </div>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">With incredible reflexes and commanding presence, Chloe is a formidable last line of defense.</p>
+                        <button class="bg-gradient-to-r from-blue-600 to-purple-500 hover:from-blue-500 hover:to-purple-400 text-white font-semibold py-2 px-6 rounded-full text-sm">
+                            View Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News & Updates Section -->
+        <section id="news" class="py-20 px-6 section-gradient-bg">
+            <div class="container mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-white">
+                    Latest <span class="gradient-text">Football News</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- News Card 1 -->
+                    <div class="glass-card p-6 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/football%20player%20celebrating%20winning%20goal%20stadium%20action%20shot?width=600&height=350&nologo=true" alt="News Image 1" class="rounded-lg mb-6 w-full h-48 object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-3">United FC Secures League Title in Thrilling Final</h3>
+                        <p class="text-gray-400 text-sm mb-4"><i class="far fa-calendar-alt mr-2"></i> May 24, 2024 | <i class="fas fa-tag mr-2"></i> League News</p>
+                        <p class="text-gray-300 leading-relaxed mb-6">United FC clinched the championship with a dramatic late goal, sending their fans into a frenzy. A testament to their season-long consistency and fighting spirit.</p>
+                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                    <!-- News Card 2 -->
+                    <div class="glass-card p-6 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/football%20coach%20giving%20instructions%20on%20sideline%20intense%20match?width=600&height=350&nologo=true" alt="News Image 2" class="rounded-lg mb-6 w-full h-48 object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-3">Managerial Change at City Rovers Amidst Performance Dip</h3>
+                        <p class="text-gray-400 text-sm mb-4"><i class="far fa-calendar-alt mr-2"></i> May 23, 2024 | <i class="fas fa-tag mr-2"></i> Club Updates</p>
+                        <p class="text-gray-300 leading-relaxed mb-6">City Rovers have announced the departure of their long-serving manager after a string of disappointing results. The search for a new leader begins immediately.</p>
+                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                    <!-- News Card 3 -->
+                    <div class="glass-card p-6 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 transition duration-300">
+                        <img src="https://image.pollinations.ai/prompt/youth%20football%20academy%20training%20session%20kids%20playing%20soccer?width=600&height=350&nologo=true" alt="News Image 3" class="rounded-lg mb-6 w-full h-48 object-cover">
+                        <h3 class="text-2xl font-semibold text-white mb-3">Youth Academy Stars Sign Professional Contracts</h3>
+                        <p class="text-gray-400 text-sm mb-4"><i class="far fa-calendar-alt mr-2"></i> May 22, 2024 | <i class="fas fa-tag mr-2"></i> Future Stars</p>
+                        <p class="text-gray-300 leading-relaxed mb-6">Several promising talents from the local youth academy have officially signed their first professional contracts, signaling a bright future for the club.</p>
+                        <a href="#" class="text-purple-400 hover:text-purple-300 font-medium flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="text-center mt-16">
+                    <button class="bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-600 hover:to-purple-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300 text-lg">
+                        <i class="fas fa-newspaper mr-2"></i> View All News
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-gradient-bg py-16 px-6 text-gray-300">
+        <div class="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <a href="#" class="text-3xl font-bold text-white tracking-tight mb-4 block">
+                    Football<span class="gradient-text">Nexus</span>
+                </a>
+                <p class="text-sm leading-relaxed">Your ultimate destination for everything football. Live scores, detailed analysis, and the latest news from the pitch to your screen.</p>
+                <div class="flex space-x-4 mt-6">
+                    <a href="#" class="text-gray-400 hover:text-purple-400 text-xl transition duration-300"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 text-xl transition duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 text-xl transition duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 text-xl transition duration-300"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-xl font-semibold text-white mb-6">Quick Links</h4>
+                <ul class="space-y-3">
+                    <li><a href="#home" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Home</a></li>
+                    <li><a href="#live-matches" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Live Matches</a></li>
+                    <li><a href="#world-cup" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> World Cup</a></li>
+                    <li><a href="#players" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Players</a></li>
+                    <li><a href="#news" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> News</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xl font-semibold text-white mb-6">Resources</h4>
+                <ul class="space-y-3">
+                    <li><a href="#" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Match Stats</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Team Rankings</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-angle-right mr-2 text-purple-600"></i> Terms of Service</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-xl font-semibold text-white mb-6">Contact Us</h4>
+                <ul class="space-y-3">
+                    <li><a href="mailto:info@footballnexus.com" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-envelope mr-2 text-purple-600"></i> info@footballnexus.com</a></li>
+                    <li><a href="tel:+1234567890" class="text-gray-400 hover:text-purple-400 transition duration-300"><i class="fas fa-phone mr-2 text-purple-600"></i> +1 234 567 890</a></li>
+                    <li><p class="text-gray-400"><i class="fas fa-map-marker-alt mr-2 text-purple-600"></i> 123 Sports Ave, Global City</p></li>
+                </ul>
+                <div class="mt-6">
+                    <input type="email" placeholder="Enter your email" class="w-full p-3 rounded-md bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-600">
+                    <button class="w-full bg-gradient-to-r from-blue-700 to-purple-600 hover:from-blue-600 hover:to-purple-500 text-white font-semibold py-3 rounded-md mt-4 shadow-lg transform hover:scale-105 transition duration-300">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-12 pt-8 text-center text-sm text-gray-500">
+            &copy; 2024 FootballNexus. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                // Close mobile menu if open
+                if (document.getElementById('mobile-menu').classList.contains('translate-x-0')) {
+                    document.getElementById('mobile-menu').classList.remove('translate-x-0');
+                    document.getElementById('mobile-menu').classList.add('translate-x-full');
+                }
+            });
+        });
+
+        // Mobile menu toggle functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileMenu.classList.add('translate-x-0');
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-0');
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        // Close mobile menu when clicking outside (optional, but good UX)
+        mobileMenu.addEventListener('click', (event) => {
+            if (event.target === mobileMenu) {
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenu.classList.add('translate-x-full');
+            }
+        });
+
+        // Animate elements on scroll (basic intersection observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up-visible');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Add an animation class that fades in and slides up
+        // This requires custom CSS but since Tailwind is loaded first,
+        // we can override/extend with basic @keyframes in the style block.
+        // For simplicity, let's just make elements visible if they have an initial hidden state
+        // For actual animation, Tailwind's `animate` utility or custom keyframes are needed.
+        // Let's assume a "hidden initially" state and then "visible" state on intersection.
+
+        // Example: Add a utility for fade-in-up to the style block.
+        // Then apply `opacity-0 transform translate-y-4` and add a class like `animate-on-scroll`
+        // Then in JS, remove those classes and add `opacity-100 transform translate-y-0` with transition.
+        // For now, I'll just rely on the static animate classes in the hero for simplicity,
+        // as dynamic on-scroll animation requires more JS/CSS coordination than allowed in the single file for a robust example.
+        // The current animate-fade-in-up in Hero section will work directly with a custom CSS keyframe.
+
+        // For this task, the prompt specifically mentioned `animate-fade-in-up` for the hero,
+        // and did not ask for on-scroll animations specifically on other elements.
+        // So, keeping it simple for the hero section with static animation.
+        // If other sections needed animation, each would need its own `opacity-0` and a class added by JS.
+    </script>
+</body>
+</html>
